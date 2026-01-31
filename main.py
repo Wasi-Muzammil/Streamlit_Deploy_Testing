@@ -5,7 +5,6 @@
 
 import streamlit as st
 import psycopg2
-import os
 
 # For local testing only
 try:
@@ -14,7 +13,7 @@ try:
 except:
     pass
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = st.secrets["DATABASE_URL"]
 
 st.title("Neon Database Test")
 
