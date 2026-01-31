@@ -25,7 +25,7 @@ try:
     conn = psycopg2.connect(DATABASE_URL)
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM users;")  # change table name if needed
+    cursor.execute("SELECT * FROM user_information;")  
     rows = cursor.fetchall()
 
     st.success("Connected to Neon Database")
