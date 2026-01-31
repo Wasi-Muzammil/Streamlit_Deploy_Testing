@@ -2,8 +2,22 @@
 
 # st.write("Fingerprint Attendance System")
 # st.write("Testing")
+
+import streamlit as st
+import psycopg2
+import os
 import sys
 import subprocess
+
+# For local testing only
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except:
+    pass
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
 
 def check_dependencies():
     """Check if required packages are installed"""
@@ -39,44 +53,29 @@ def check_dependencies():
         print("\n✅ All dependencies are installed")
 
 
-check_dependencies()
-import streamlit as st
-import psycopg2
-import os
+if __name__ == "__main__":
+    check_dependencies()
+    st.title("Neon Database Test")
 
+    if not DATABASE_URL:
+        st.error("DATABASE_URL not found")
+        st.stop()
 
-# For local testing only
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except:
-    pass
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cursor = conn.cursor()
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+        cursor.execute("SELECT * FROM user_information;")  
+        rows = cursor.fetchall()
 
+        st.success("Connected to Neon Database")
 
+        for row in rows:
+            st.write(row)
 
-st.title("Neon Database Test")
+        cursor.close()
+        conn.close()
 
-if not DATABASE_URL:
-    st.error("DATABASE_URL not found")
-    st.stop()
-
-try:
-    conn = psycopg2.connect(DATABASE_URL)
-    cursor = conn.cursor()
-
-    cursor.execute("SELECT * FROM user_information;")  
-    rows = cursor.fetchall()
-
-    st.success("Connected to Neon Database")
-
-    for row in rows:
-        st.write(row)
-
-    cursor.close()
-    conn.close()
-
-except Exception as e:
-    st.error("Database connection failed")
-    st.exception(e)
+    except Exception as e:
+        st.error("Database connection failed")
+        st.exception(e)
