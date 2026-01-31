@@ -3,22 +3,6 @@
 # st.write("Fingerprint Attendance System")
 # st.write("Testing")
 
-import streamlit as st
-import psycopg2
-import os
-import sys
-import subprocess
-
-# For local testing only
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except:
-    pass
-
-DATABASE_URL = os.getenv("DATABASE_URL")
-
-
 def check_dependencies():
     """Check if required packages are installed"""
     
@@ -54,7 +38,13 @@ def check_dependencies():
 
 
 if __name__ == "__main__":
+    import sys
+    import subprocess
     check_dependencies()
+    import streamlit as st
+    import psycopg2
+    import os
+    DATABASE_URL = os.getenv("DATABASE_URL")
     st.title("Neon Database Test")
 
     if not DATABASE_URL:
