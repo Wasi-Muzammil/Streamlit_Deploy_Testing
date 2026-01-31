@@ -6,6 +6,8 @@
 import streamlit as st
 import psycopg2
 import os
+import sys
+import subprocess
 
 # For local testing only
 try:
@@ -15,6 +17,43 @@ except:
     pass
 
 DATABASE_URL = os.getenv("DATABASE_URL")
+
+
+def check_dependencies():
+    """Check if required packages are installed"""
+    
+    required_packages = [
+        'psycopg2',
+        'uvicorn',
+        'streamlit',
+        'pillow',
+    ]
+    
+    missing_packages = []
+    
+    for package in required_packages:
+        try:
+            __import__(package.replace('-', '_'))
+            print(f"{package}")
+        except ImportError:
+            print(f"{package} - NOT INSTALLED")
+            missing_packages.append(package)
+    
+    if missing_packages:
+        print(f"\n Missing packages: {', '.join(missing_packages)}")
+        print("\nInstalling missing packages...")
+        
+        # Install missing packages
+        subprocess.check_call([
+            sys.executable, "-m", "pip", "install"
+        ] + missing_packages)
+        
+        print("✅ All packages installed!")
+    else:
+        print("\n✅ All dependencies are installed")
+
+
+
 
 st.title("Neon Database Test")
 
