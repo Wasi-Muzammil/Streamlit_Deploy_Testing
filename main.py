@@ -23,7 +23,7 @@ def check_dependencies():
     """Check if required packages are installed"""
     
     required_packages = [
-        'psycopg2',
+        'psycopg',
         'uvicorn',
         'streamlit',
         'pillow',
